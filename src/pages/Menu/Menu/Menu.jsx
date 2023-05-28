@@ -26,7 +26,7 @@ const Menu = () => {
             <Cover img={menuImg} title="Our Menu"></Cover>
 
             <SectionTitle heading="Don't miss" subHeading="TODAY'S OFFER"></SectionTitle>
-            <MenuCategory items={offered} coverImg={dessImg} title="dessert"></MenuCategory>
+            <MenuCategory items={offered}></MenuCategory>
 
             <MenuCategory items={dessert} coverImg={dessImg} title="dessert"></MenuCategory>
 

@@ -9,7 +9,7 @@ const Login = () => {
 
     const { loginUser, loginWithGoogle } = useContext(AuthContext);
 
-    const [disabled, setDisabled] = useState(true);
+    const [ setDisabled] = useState(true);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -43,6 +43,7 @@ const Login = () => {
             })
             .catch(error => console.error(error));
     }
+
 
     const handleValidate = (e) => {
         const user_captcha_value = e.target.value;
@@ -99,7 +100,7 @@ const Login = () => {
 
                             </div>
                             <div className="form-control mt-6">
-                                <input disabled={disabled} type="submit" className="btn btn-primary" value={"Login"} />
+                                <input disabled={false} type="submit" className="btn btn-primary" value={"Login"} />
                             </div>
                         </form>
                         <p>Do not have an account? <Link to="/signup">Sign up</Link></p>

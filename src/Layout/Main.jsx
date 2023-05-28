@@ -4,7 +4,7 @@ import Footer from "../pages/Shared/Footer/Footer";
 
 const Main = () => {
     const location = useLocation();
-    console.log(location);
+    // console.log(location);
 
     const isNF = location.pathname === "/login" || location.pathname === "/signup";
 

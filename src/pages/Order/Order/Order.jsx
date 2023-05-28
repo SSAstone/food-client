@@ -10,7 +10,6 @@ import { Helmet } from 'react-helmet-async';
 
 const Order = () => {
     const [menu] = useMenu();
-    console.log(menu);
 
     const categories = ['salad', 'pizza', 'soup', 'dessert', 'drinks'];
 

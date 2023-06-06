@@ -4,43 +4,58 @@ import { useForm } from "react-hook-form";
 import { AuthContext } from "../providers/AuthProvider";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
+import SocialLogin from "../pages/SocialLogin/SocialLogin";
 
 const SignUp = () => {
-    const {createUser, updateUserProfile} = useContext(AuthContext);
-    const { register, handleSubmit, reset,  formState: { errors } } = useForm();
+    const { createUser, updateUserProfile } = useContext(AuthContext);
+    const { register, handleSubmit, reset, formState: { errors } } = useForm();
     const navigate = useNavigate();
 
     const onSubmit = data => {
         console.log(data.email, data.password);
-        
+
         createUser(data.email, data.password)
-        .then(result => {
-            const user = result.user;
-            console.log(user);
-            updateUserProfile(data.name, data.photoURL)
-            .then(() => {
-                reset();
-                Swal.fire({
-                    title: 'User created successfully',
-                    showClass: {
-                        popup: 'animate__animated animate__fadeInDown'
-                    },
-                    hideClass: {
-                        popup: 'animate__animated animate__fadeOutUp'
-                    }
-                })
-                navigate('/');
+            .then(result => {
+                const user = result.user;
+                console.log(user);
+                updateUserProfile(data.name, data.photoURL)
+                    .then(() => {
+                        const saveUser = { name: data.name, email: data.email };
+                        fetch('https://bistro-boss-server-shiamhub.vercel.app/users', {
+                            method: 'POST',
+                            headers: {
+                                'content-type': 'application/json'
+                            },
+                            body: JSON.stringify(saveUser)
+                        })
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data.insertedId) {
+                                    reset();
+                                    Swal.fire({
+                                        title: 'User created successfully',
+                                        showClass: {
+                                            popup: 'animate__animated animate__fadeInDown'
+                                        },
+                                        hideClass: {
+                                            popup: 'animate__animated animate__fadeOutUp'
+                                        }
+                                    })
+                                    navigate('/');
+                                }
+                            })
+
+                    })
+                    .catch(error => console.error(error));
             })
             .catch(error => console.error(error));
-        })
-        .catch(error => console.error(error));
     };
 
     return (
         <>
-        <Helmet>
-            <title>Bistro | Sign Up</title>
-        </Helmet>
+            <Helmet>
+                <title>Bistro | Sign Up</title>
+            </Helmet>
             <div className="hero min-h-screen bg-base-200">
                 <div className="hero-content flex-col lg:flex-row-reverse">
                     <div className="text-center lg:text-left">
@@ -92,6 +107,7 @@ const SignUp = () => {
                             </div>
                         </form>
                         <p><small>Already have an account?<Link to="/login">Login</Link></small></p>
+                        <SocialLogin></SocialLogin>
                     </div>
                 </div>
             </div>

@@ -12,12 +12,11 @@ const FoodCard = ({ item }) => {
     const location = useLocation();
 
     const handleAddTOCart = (item) => {
-        console.log(item);
+        console.log(item)
         if (user) {
             const cartItem = {
                 menuItemId: _id, name, image, price, email: user.email
-            }
-            console.log(cartItem);
+            };
             fetch('https://bistro-boss-server-xi.vercel.app/carts', {
                 method: 'POST',
                 headers: {

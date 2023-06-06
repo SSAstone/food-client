@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
 import app from "../firebase/firebase.config";
+import axios from "axios";
 
 export const AuthContext = createContext();
 const auth = getAuth(app);
@@ -20,9 +21,9 @@ const AuthProvider = ({ children }) => {
     }
 
     const loginWithGoogle = () => {
+        setLoading(true);
         const provider = new GoogleAuthProvider();
         return signInWithPopup(auth, provider);
-        
     }
 
     const logOut = () => {
@@ -40,8 +41,16 @@ const AuthProvider = ({ children }) => {
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
             setUser(user);
-            // console.log(user);
-            setLoading(false);
+            if (user) {
+                axios.post('https://bistro-boss-server-shiamhub.vercel.app/jwt', { email: user.email })
+                    .then(data => {
+                        localStorage.setItem('access-token', data.data.token);
+                        setLoading(false);
+                    })
+            }
+            else {
+                localStorage.removeItem('access-token');
+            }
         })
         return () => unsubscribe();
     }, [])
